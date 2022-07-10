@@ -11,8 +11,8 @@ import { Task } from 'src/app/Task';
 export class AddTaskComponent implements OnInit {
   @Output() onAddTask: EventEmitter<Task> = new EventEmitter();
 
-  text!: string;
-  day!: string;
+  name!: string;
+  comments!: string;
   reminder: boolean = false;
   showAddTask!: boolean;
   subscription: Subscription;
@@ -27,21 +27,22 @@ export class AddTaskComponent implements OnInit {
   }
 
   onSubmit() {
-    if (!this.text) {
+    if (!this.name) {
       alert('Please add a task!');
       return;
     }
-
+    
     const newTask = {
-      text: this.text,
-      day: this.day,
-      reminder: this.reminder
+      name: this.name,
+      comments: this.comments,
+      reminder: this.reminder,
+      taskTypeId: 1
     }
 
     this.onAddTask.emit(newTask);
 
-    this.text = '';
-    this.day = '';
+    this.name = '';
+    this.comments = '';
     this.reminder = false;
   }
 
