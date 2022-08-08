@@ -1,3 +1,16 @@
 <app-add-task (onAddTask)="addTask($event)"></app-add-task>
+<div>
+    <h1>Home</h1>
+    <p></p>
+    <!-- <button (click)="openModal('error-dialog')">Open Modal 1</button> -->
+</div>
+
+<app-pop-up class="pop-up" id="error-dialog">
+    <h3>{{errDialogTitle}}
+        <fa-icon (click)="closeModal('error-dialog');" [ngStyle]="{'color':'red'}" [icon]="faTimes"></fa-icon>
+    </h3>
+    <p>{{errDialogTest}}</p>
+</app-pop-up >
 <app-task-item *ngFor="let task of tasks" [task]="task" (onDeleteTask)="deleteTask(task)"
-    (onToggleReminder)="toggleReminder(task)"></app-task-item>
+    (onToggleReminder)="toggleReminder(task)">
+</app-task-item>

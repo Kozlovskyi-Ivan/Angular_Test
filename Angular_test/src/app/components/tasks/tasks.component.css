@@ -1,0 +1,8 @@
+.pop-up {
+    display: none;
+}
+.pop-up h3 {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
