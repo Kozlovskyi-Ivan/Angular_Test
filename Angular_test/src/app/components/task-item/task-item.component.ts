@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Task } from 'src/app/Task';
+import { UpdateTaskService } from 'src/app/services/updatе-task.service';
 import { faTimes, faEdit } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
@@ -16,13 +17,14 @@ export class TaskItemComponent implements OnInit {
   faTimes = faTimes;
   faEdit = faEdit;
 
-  constructor() { }
+  constructor(private updateTask:UpdateTaskService) { }
 
   ngOnInit(): void {
   }
 
   onEdit(task: Task): void {
-    this.onEditTask.emit(task);
+    // this.onEditTask.emit(task);
+    this.updateTask.callEditForm(task);
   }
   onDelete(task: Task): void {
     this.onDeleteTask.emit(task);

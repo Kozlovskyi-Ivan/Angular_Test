@@ -55,15 +55,14 @@ export class TasksComponent implements OnInit {
   }
 
   editTask(task: Task) {
-    // task.reminder=!task.reminder;
-    // this.taskService
-    //   .updateTaskReminder(task)
-    //   .subscribe({
-    //     next:()=>(this.tasks = this.tasks),
-    //     error:(error)=>{
-    //       this.openErrDialog(`Error code:${error.status}`,"Item's status has not been changed");
-    //     }
-    //   });
+    this.taskService
+      .updateTaskReminder(task)
+      .subscribe({
+        next:()=>(this.taskService.getTasks().subscribe((tasks) => this.tasks = tasks)),
+        error:(error)=>{
+          this.openErrDialog(`Error code:${error.status}`,"Item's status has not been changed");
+        }
+      });
   }
 
   openErrDialog(errTitle:string, errText:string){
