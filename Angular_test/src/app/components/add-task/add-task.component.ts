@@ -18,8 +18,9 @@ export class AddTaskComponent implements OnInit {
   comments!: string;
   reminder: boolean = false;
   showAddTask!: boolean;
-  subscription: Subscription;
   submitBtnText: string = "Save Task";
+
+  subscription: Subscription;
 
   constructor(private uiService: UiService, private updateTask: UpdateTaskService) {
     this.subscription = this.uiService
@@ -57,14 +58,15 @@ export class AddTaskComponent implements OnInit {
     this.reminder = task.reminder;
     this.showAddTask = true;
 
-    this.submitBtnText ="Update Task";
+    this.switchBtnText(true);
   }
 
   toggleForm(showForm: boolean) {
     if (!showForm)
       this.cleanForm();
     this.showAddTask = showForm;
-    this.submitBtnText ="Save Task";
+
+    this.switchBtnText(false);
   }
 
   cleanForm(): void {
@@ -73,7 +75,7 @@ export class AddTaskComponent implements OnInit {
     this.comments = '';
     this.reminder = false;
 
-    this.submitBtnText ="Save Task";
+    this.switchBtnText(false);
   }
 
   createTask(isEdit: boolean): Task {
@@ -93,6 +95,10 @@ export class AddTaskComponent implements OnInit {
         taskTypeId: 1
       }
     }
+  }
+
+  switchBtnText(isEdit: boolean): void {
+    this.submitBtnText = isEdit == true ? "Update Task" : "Save Task";
   }
 
 }
