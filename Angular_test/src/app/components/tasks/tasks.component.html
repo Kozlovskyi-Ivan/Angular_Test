@@ -1,6 +1,6 @@
 <app-add-task (onAddTask)="addTask($event)" (onEditTask)="editTask($event)"></app-add-task>
 <div>
-    <h1>Home</h1>
+    <h1>To-Do List</h1>
     <p></p>
 </div>
 <app-task-item *ngFor="let task of tasks" [task]="task" (onDeleteTask)="deleteTask(task)"

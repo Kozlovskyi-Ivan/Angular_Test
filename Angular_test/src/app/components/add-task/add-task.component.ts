@@ -3,6 +3,7 @@ import { UiService } from 'src/app/services/ui.service';
 import { Subscription } from 'rxjs';
 import { Task } from 'src/app/Task';
 import { UpdateTaskService } from 'src/app/services/updatе-task.service';
+import { TaskService } from 'src/app/services/task.service';
 
 @Component({
   selector: 'app-add-task',
@@ -22,7 +23,7 @@ export class AddTaskComponent implements OnInit {
 
   subscription: Subscription;
 
-  constructor(private uiService: UiService, private updateTask: UpdateTaskService) {
+  constructor(private uiService: UiService, private updateTask: UpdateTaskService, private taskService: TaskService) {
     this.subscription = this.uiService
       .onToggle()
       .subscribe(value => this.toggleForm(value));
