@@ -11,3 +11,8 @@ export interface Task {
   reminder: boolean;
   taskTypeId: number;
 }
+
+export interface TaskType {
+  id: number;
+  type: string;
+}

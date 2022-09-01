@@ -19,6 +19,19 @@
         placeholder="Add Day & Time"
       />
     </div>
+    <div class="form-control">
+      <label for="comments">Task Type</label>
+      <select
+      *ngIf="selTaskTypes"
+        type="text"
+        name="taskTypesList"
+        [(ngModel)]="taskTypeId"
+        id="selTaskTypes"
+        placeholder="Add Day & Time" >
+        <option *ngFor="let taskType of selTaskTypes" 
+        [ngValue]="taskType.id">{{taskType.type}}</option>
+      </select>
+    </div>
     <div class="form-control form-control-check">
       <label for="reminder">Set Reminder</label>
       <input

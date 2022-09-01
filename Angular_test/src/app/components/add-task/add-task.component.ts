@@ -1,7 +1,7 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { UiService } from 'src/app/services/ui.service';
 import { Subscription } from 'rxjs';
-import { Task } from 'src/app/Task';
+import { Task, TaskType } from 'src/app/Task';
 import { UpdateTaskService } from 'src/app/services/updatе-task.service';
 import { TaskService } from 'src/app/services/task.service';
 
@@ -17,9 +17,12 @@ export class AddTaskComponent implements OnInit {
   id?: number;
   name!: string;
   comments!: string;
+  taskTypeId!: number;
   reminder: boolean = false;
+
   showAddTask!: boolean;
   submitBtnText: string = "Save Task";
+  selTaskTypes!: TaskType[];
 
   subscription: Subscription;
 
@@ -31,6 +34,10 @@ export class AddTaskComponent implements OnInit {
     this.subscription = this.updateTask
       .onEditForm()
       .subscribe((task) => { this.bindFormOnEdit(task); });
+
+    this.subscription = this.taskService
+      .getTaskTypes()
+      .subscribe((taskTypes) => this.bindSelTaskTypes(taskTypes));
   }
 
   ngOnInit(): void {
@@ -42,7 +49,7 @@ export class AddTaskComponent implements OnInit {
       return;
     }
 
-    const newTask = this.createTask(this.id == null);
+    const newTask = this.createTask();
 
     newTask.id == null
       ? this.onAddTask.emit(newTask)
@@ -56,10 +63,16 @@ export class AddTaskComponent implements OnInit {
     this.id = task.id;
     this.name = task.name;
     this.comments = task.comments;
+    this.taskTypeId= task.taskTypeId;
     this.reminder = task.reminder;
-    this.showAddTask = true;
 
+    this.showAddTask = true;
     this.switchBtnText(true);
+  }
+
+  bindSelTaskTypes(taskTypes: TaskType[]) {
+    this.selTaskTypes = taskTypes;
+    this.taskTypeId = taskTypes[0].id;
   }
 
   toggleForm(showForm: boolean) {
@@ -79,23 +92,14 @@ export class AddTaskComponent implements OnInit {
     this.switchBtnText(false);
   }
 
-  createTask(isEdit: boolean): Task {
-    if (!isEdit) {
+  createTask(): Task {
       return {
         id: this.id,
         name: this.name,
         comments: this.comments,
         reminder: this.reminder,
-        taskTypeId: 1
+        taskTypeId: this.taskTypeId
       }
-    } else {
-      return {
-        name: this.name,
-        comments: this.comments,
-        reminder: this.reminder,
-        taskTypeId: 1
-      }
-    }
   }
 
   switchBtnText(isEdit: boolean): void {

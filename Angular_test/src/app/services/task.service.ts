@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http'
 import { Observable } from 'rxjs';
-import { Task } from 'src/app/Task';
+import { Task, TaskType } from 'src/app/Task';
 
 const httpOptions={
   headers: new HttpHeaders({
@@ -19,6 +19,10 @@ export class TaskService {
 
   getTasks(): Observable<Task[]> {
     return this.http.get<Task[]>(this.apiUrl+'/TaskNotes');
+  }
+
+  getTaskTypes():Observable<TaskType[]>{
+    return this.http.get<TaskType[]>(this.apiUrl+'/TaskTypes');
   }
 
   deleteTask(task:Task):Observable<Task>{

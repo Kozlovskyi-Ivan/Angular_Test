@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { UiService } from 'src/app/services/ui.service';
 import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
+import { UpdateTaskService } from 'src/app/services/updatе-task.service';
 
 @Component({
   selector: 'app-header',
@@ -13,10 +14,14 @@ export class HeaderComponent implements OnInit {
   showAddTask!: boolean;
   subscription!: Subscription;
 
-  constructor(private uiService: UiService, private router: Router) {
+  constructor(private uiService: UiService, private updateTaskService: UpdateTaskService, private router: Router) {
     this.subscription = this.uiService
       .onToggle()
       .subscribe(value => this.showAddTask = value);
+
+    this.subscription = this.updateTaskService
+      .onEditForm()
+      .subscribe(() => this.showAddTask = true);
   }
 
   ngOnInit(): void {
