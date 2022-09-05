@@ -1,4 +1,4 @@
-<app-add-task (onAddTask)="addTask($event)" (onEditTask)="editTask($event)"></app-add-task>
+<app-add-task (onFormSubmit)="taskRefresh()" (onFormError)="showFormError($event)"></app-add-task>
 <div>
     <h1>To-Do List</h1>
     <p></p>

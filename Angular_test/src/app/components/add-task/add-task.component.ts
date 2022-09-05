@@ -4,15 +4,18 @@ import { Subscription } from 'rxjs';
 import { Task, TaskType } from 'src/app/Task';
 import { UpdateTaskService } from 'src/app/services/updatе-task.service';
 import { TaskService } from 'src/app/services/task.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-add-task',
   templateUrl: './add-task.component.html',
   styleUrls: ['./add-task.component.css']
 })
-export class AddTaskComponent implements OnInit {
-  @Output() onAddTask: EventEmitter<Task> = new EventEmitter();
-  @Output() onEditTask: EventEmitter<Task> = new EventEmitter();
+export class AddTaskComponent {
+  // @Output() onAddTask: EventEmitter<Task> = new EventEmitter();
+  // @Output() onEditTask: EventEmitter<Task> = new EventEmitter();
+  @Output() onFormSubmit: EventEmitter<any> = new EventEmitter();
+  @Output() onFormError:EventEmitter<HttpErrorResponse> = new EventEmitter();
 
   id?: number;
   name!: string;
@@ -26,21 +29,18 @@ export class AddTaskComponent implements OnInit {
 
   subscription: Subscription;
 
-  constructor(private uiService: UiService, private updateTask: UpdateTaskService, private taskService: TaskService) {
+  constructor(private uiService: UiService, private updateTaskService: UpdateTaskService, private taskService: TaskService) {
     this.subscription = this.uiService
       .onToggle()
       .subscribe(value => this.toggleForm(value));
 
-    this.subscription = this.updateTask
+    this.subscription = this.updateTaskService
       .onEditForm()
       .subscribe((task) => { this.bindFormOnEdit(task); });
 
     this.subscription = this.taskService
       .getTaskTypes()
       .subscribe((taskTypes) => this.bindSelTaskTypes(taskTypes));
-  }
-
-  ngOnInit(): void {
   }
 
   onSubmit() {
@@ -52,11 +52,33 @@ export class AddTaskComponent implements OnInit {
     const newTask = this.createTask();
 
     newTask.id == null
-      ? this.onAddTask.emit(newTask)
-      : this.onEditTask.emit(newTask);
+      ? this.addTask(newTask)
+      : this.updateTask(newTask);
 
     this.cleanForm();
 
+  }
+
+  addTask(task:Task){
+    this.taskService.addTask(task).subscribe({
+      next:()=>{
+        this.onFormSubmit.emit();
+      },
+      error:(error)=>{
+        this.onFormError.emit(error);
+      }
+    });
+  }
+
+  updateTask(task:Task){
+    this.taskService.updateTask(task).subscribe({
+      next:()=>{
+        this.onFormSubmit.emit();
+      },
+      error:(error)=>{
+        this.onFormError.emit(error);
+      }
+    })
   }
 
   bindFormOnEdit(task: Task) {

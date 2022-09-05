@@ -3,6 +3,7 @@ import { TaskService } from 'src/app/services/task.service';
 import { Task } from 'src/app/Task';
 import { PopUpModalService } from 'src/app/services/pop-up-modal.service';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
+import { HttpErrorResponse } from '@angular/common/http';
 
 
 @Component({
@@ -36,7 +37,7 @@ export class TasksComponent implements OnInit {
   toggleReminder(task: Task) {
     task.reminder=!task.reminder;
     this.taskService
-      .updateTaskReminder(task)
+      .updateTask(task)
       .subscribe({
         next:()=>(this.tasks = this.tasks),
         error:(error)=>{
@@ -45,18 +46,17 @@ export class TasksComponent implements OnInit {
       });
   }
 
-  addTask(task: Task) {
-    this.taskService.addTask(task).subscribe({
-      next: (task) => (this.tasks.push(task)),
-      error: (error) => {
-        this.openErrDialog(`Error code:${error.status}`,"Item has not been added");
-      }
-    });
+  taskRefresh(){
+    this.taskService.getTasks().subscribe((taskList)=>this.tasks=taskList);
+  }
+
+  showFormError(error:HttpErrorResponse){
+    this.openErrDialog(`Error code:${error.status}`,"Item has not been added or changed");
   }
 
   editTask(task: Task) {
     this.taskService
-      .updateTaskReminder(task)
+      .updateTask(task)
       .subscribe({
         next:()=>(this.taskService.getTasks().subscribe((tasks) => this.tasks = tasks)),
         error:(error)=>{

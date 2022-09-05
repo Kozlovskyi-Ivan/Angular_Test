@@ -30,7 +30,7 @@ export class TaskService {
     return this.http.delete<Task>(url);
   }
   
-  updateTaskReminder(task:Task):Observable<Task>{
+  updateTask(task:Task):Observable<Task>{
     const url=`${this.apiUrl}/TaskNotes/${task.id}`;
     return this.http.put<Task>(url, task, httpOptions);
   }
